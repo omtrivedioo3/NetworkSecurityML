@@ -87,6 +87,7 @@ class TrainingPipeline:
         except Exception as e:
             raise NetworkSecurityException(e, sys)
 
+
     ## local artifact is going to s3 bucket    
     def sync_artifact_dir_to_s3(self):
         try:
