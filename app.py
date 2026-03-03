@@ -12,7 +12,9 @@ import pymongo
 from networksecurity.exception.exception import NetworkSecurityException
 from networksecurity.logging.logger import logging
 from networksecurity.pipeline.training_pipeline import TrainingPipeline
-
+from fastapi.staticfiles import StaticFiles
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+TEMPLATE_DIR = os.path.join(BASE_DIR, "networksecurity", "templates")
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, File, UploadFile,Request
 from uvicorn import run as app_run
@@ -36,6 +38,9 @@ collection = database[DATA_INGESTION_COLLECTION_NAME]
 app = FastAPI()
 origins = ["*"]
 
+STATIC_DIR = os.path.join(BASE_DIR, "networksecurity", "static")
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -45,21 +50,26 @@ app.add_middleware(
 )
 
 from fastapi.templating import Jinja2Templates
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-TEMPLATE_DIR = os.path.join(BASE_DIR, "networksecurity", "templates")
+
 
 templates = Jinja2Templates(directory=TEMPLATE_DIR)
 
-@app.get("/", tags=["authentication"])
-async def index():
-    return RedirectResponse(url="/docs")
+@app.get("/")
+async def home(request: Request):
+    return templates.TemplateResponse(
+        "index.html",
+        {"request": request}
+    )
 
 @app.get("/train")
 async def train_route():
     try:
         train_pipeline=TrainingPipeline()
-        train_pipeline.run_pipeline()
-        return Response("Training is successful")
+        metrics =train_pipeline.run_pipeline()
+        return {
+            "status": "Training Completed Successfully",
+            "model_performance": metrics
+        }
     except Exception as e:
         raise NetworkSecurityException(e,sys)
     
@@ -73,9 +83,20 @@ async def predict_route(request: Request,file: UploadFile = File(...)):
         network_model = NetworkModel(preprocessor=preprocesor,model=final_model)
         print(df.iloc[0])
         y_pred = network_model.predict(df)
-        print(y_pred)
-        df['predicted_column'] = y_pred
-        print(df['predicted_column'])
+
+        # Convert numeric prediction to meaningful label
+        df['Prediction'] = y_pred
+        df['Prediction'] = df['Prediction'].map({
+            1: "Legitimate Website",
+            0: "Phishing Website",
+            -1: "Phishing Website"
+        })
+
+        # Summary Counts
+        total_records = len(df)
+        phishing_count = (df['Prediction'] == "Phishing Website").sum()
+        legitimate_count = (df['Prediction'] == "Legitimate Website").sum()
+        print(df['Prediction'])
         #df['predicted_column'].replace(-1, 0)
         #return df.to_json()
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -86,9 +107,18 @@ async def predict_route(request: Request,file: UploadFile = File(...)):
         output_path = os.path.join(output_dir, "output.csv")
 
         df.to_csv(output_path, index=False)
-        table_html = df.to_html(classes='table table-striped')
-        #print(table_html)
-        return templates.TemplateResponse("table.html", {"request": request, "table": table_html})
+        table_html = df.to_html(classes='table table-striped', index=False)
+
+        return templates.TemplateResponse(
+            "result.html",
+            {
+                "request": request,
+                "table": table_html,
+                "total_records": total_records,
+                "phishing_count": phishing_count,
+                "legitimate_count": legitimate_count
+            }
+        )
         
     except Exception as e:
             raise NetworkSecurityException(e,sys)

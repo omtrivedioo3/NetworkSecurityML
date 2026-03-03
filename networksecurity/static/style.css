@@ -1,0 +1,115 @@
+body {
+  font-family: "Segoe UI", sans-serif;
+  background-color: #f4f6f9;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 90%;
+  margin: auto;
+  margin-top: 40px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+}
+
+.upload-section {
+  text-align: center;
+  padding: 30px;
+}
+
+input[type="file"] {
+  padding: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  background: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+.summary {
+  display: flex;
+  justify-content: space-around;
+}
+
+.summary-box {
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+  text-align: center;
+  width: 30%;
+}
+
+.total {
+  background: #6c757d;
+}
+.phishing {
+  background: #dc3545;
+}
+.legitimate {
+  background: #28a745;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+th {
+  background: #343a40;
+  color: white;
+}
+
+.badge-phishing {
+  color: white;
+  background: #dc3545;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.badge-legit {
+  color: white;
+  background: #28a745;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  min-width: 1200px;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background: #343a40;
+}

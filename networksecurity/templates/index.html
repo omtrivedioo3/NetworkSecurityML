@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Phishing Detection System</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="card upload-section">
+        <h1>🔍 Phishing Website Detection</h1>
+        <p>Upload CSV file to check if websites are Legitimate or Phishing</p>
+
+        <form action="/predict" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" required>
+            <br><br>
+            <button type="submit">Predict</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

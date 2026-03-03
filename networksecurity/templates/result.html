@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Prediction Results</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <h1>📊 Prediction Summary</h1>
+
+        <div class="summary">
+          <div class="summary-box total">
+            <h3>Total Records</h3>
+            <h2>{{ total_records }}</h2>
+          </div>
+
+          <div class="summary-box phishing">
+            <h3>Phishing Websites</h3>
+            <h2>{{ phishing_count }}</h2>
+          </div>
+
+          <div class="summary-box legitimate">
+            <h3>Legitimate Websites</h3>
+            <h2>{{ legitimate_count }}</h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Detailed Predictions</h2>
+
+        <div class="table-container">{{ table | safe }}</div>
+      </div>
+
+      <div class="card" style="text-align: center">
+        <a href="/"><button>Upload Another File</button></a>
+      </div>
+    </div>
+  </body>
+</html>

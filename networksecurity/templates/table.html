@@ -1,21 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <title>Data Table</title>
+  <head>
+    <title>Prediction Results</title>
     <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
+      body {
+        font-family: Arial;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th,
+      td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      .summary {
+        margin-bottom: 20px;
+        font-size: 18px;
+      }
     </style>
-</head>
-<body>
-    <h2>Predicted Data</h2>
+  </head>
+  <body>
+    <h2>🔍 Phishing Detection Results</h2>
+
+    <div class="summary">
+      <p><strong>Total Records:</strong> {{ total_records }}</p>
+      <p><strong>Phishing Websites:</strong> {{ phishing_count }}</p>
+      <p><strong>Legitimate Websites:</strong> {{ legitimate_count }}</p>
+    </div>
+
     {{ table | safe }}
-</body>
+  </body>
 </html>
